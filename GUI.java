@@ -6,6 +6,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import javax.sound.sampled.*;
 import javax.swing.*;
+import java.io.SequenceInputStream;
+import java.lang.reflect.Array;
+import java.util.*;
 
 public class GUI extends JFrame{
     JPanel jp = new JPanel();
@@ -13,7 +16,8 @@ public class GUI extends JFrame{
     JButton save = new JButton("Save Recording");
     JButton delete = new JButton("Delete Recording");
     JButton listen = new JButton("Listen to Recording");
-
+    ArrayList<String> sounds = new ArrayList<String>();
+    String file;
 
 
     public GUI(){
@@ -29,6 +33,8 @@ public class GUI extends JFrame{
 
         add(jp);
         //Dropdown List
+
+
         JLabel lbl = new JLabel("Select one of the possible choices to hear a sound");
         lbl.setVisible(true);
 
@@ -61,7 +67,7 @@ public class GUI extends JFrame{
                         Clip clip = AudioSystem.getClip();
                         clip.open(audio);
                         clip.start();
-
+                        sounds.add("musical098.wav");
                     }
 
                     catch(UnsupportedAudioFileException uae) {
@@ -82,7 +88,7 @@ public class GUI extends JFrame{
                         Clip clip = AudioSystem.getClip();
                         clip.open(audio);
                         clip.start();
-
+                        sounds.add("musical112.wav");
                     }
 
                     catch(UnsupportedAudioFileException uae) {
@@ -103,7 +109,7 @@ public class GUI extends JFrame{
                         Clip clip = AudioSystem.getClip();
                         clip.open(audio);
                         clip.start();
-
+                        sounds.add("musical029.wav");
                     }
 
                     catch(UnsupportedAudioFileException uae) {
@@ -124,7 +130,7 @@ public class GUI extends JFrame{
                         Clip clip = AudioSystem.getClip();
                         clip.open(audio);
                         clip.start();
-
+                        sounds.add("musical007.wav");
                     }
 
                     catch(UnsupportedAudioFileException uae) {
@@ -145,7 +151,7 @@ public class GUI extends JFrame{
                         Clip clip = AudioSystem.getClip();
                         clip.open(audio);
                         clip.start();
-
+                        sounds.add("musical056.wav");
                     }
 
                     catch(UnsupportedAudioFileException uae) {
@@ -166,7 +172,7 @@ public class GUI extends JFrame{
                         Clip clip = AudioSystem.getClip();
                         clip.open(audio);
                         clip.start();
-
+                        sounds.add("dixie-horn_daniel-simion.wav");
                     }
 
                     catch(UnsupportedAudioFileException uae) {
@@ -193,6 +199,13 @@ public class GUI extends JFrame{
                 if (result == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = jFileChooser.getSelectedFile();
                     System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+                    try {
+                        concatenateFiles(sounds, selectedFile.getAbsolutePath());
+                        file = selectedFile.getAbsolutePath();
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                    }
+
                 }
 
 
@@ -208,11 +221,75 @@ public class GUI extends JFrame{
 
         listen.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                try {
+                    AudioInputStream audio = AudioSystem.getAudioInputStream(new File(file));
+                    Clip clip = AudioSystem.getClip();
+                    clip.open(audio);
+                    clip.start();
+                }
 
+                catch(UnsupportedAudioFileException uae) {
+                    System.out.println(uae);
+                }
+                catch(IOException ioe) {
+                    System.out.println(ioe);
+                }
+                catch(LineUnavailableException lua) {
+                    System.out.println(lua);
+                }
             }
 
         });
 
+    }
+
+    public Boolean concatenateFiles(ArrayList<String> sourceFilesList, String destinationFileName) throws Exception {
+        Boolean result = false;
+
+        AudioInputStream audioInputStream = null;
+        List<AudioInputStream> audioInputStreamList = null;
+        AudioFormat audioFormat = null;
+        Long frameLength = null;
+
+        try {
+            // loop through our files first and load them up
+            for (String sourceFile : sourceFilesList) {
+                audioInputStream = AudioSystem.getAudioInputStream(new File(sourceFile));
+
+                // get the format of first file
+                if (audioFormat == null) {
+                    audioFormat = audioInputStream.getFormat();
+                }
+
+                // add it to our stream list
+                if (audioInputStreamList == null) {
+                    audioInputStreamList = new ArrayList<AudioInputStream>();
+                }
+                audioInputStreamList.add(audioInputStream);
+
+                // keep calculating frame length
+                if(frameLength == null) {
+                    frameLength = audioInputStream.getFrameLength();
+                } else {
+                    frameLength += audioInputStream.getFrameLength();
+                }
+            }
+
+            // now write our concatenated file
+            AudioSystem.write(new AudioInputStream(new SequenceInputStream(Collections.enumeration(audioInputStreamList)), audioFormat, frameLength), AudioFileFormat.Type.WAVE, new File(destinationFileName));
+
+            // if all is good, return true
+            result = true;
+        } finally {
+            if (audioInputStream != null) {
+                audioInputStream.close();
+            }
+            if (audioInputStreamList != null) {
+                audioInputStreamList = null;
+            }
+        }
+
+        return result;
     }
 
     public static void main(String[] args) {
