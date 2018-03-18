@@ -8,7 +8,11 @@ import javax.sound.sampled.*;
 import javax.swing.*;
 import java.io.SequenceInputStream;
 import java.lang.reflect.Array;
+import java.net.SocketException;
 import java.util.*;
+import com.illposed.osc.*;
+import javax.sound.sampled.LineEvent.*;
+
 
 public class GUI extends JFrame{
     JPanel jp = new JPanel();
@@ -18,9 +22,64 @@ public class GUI extends JFrame{
     JButton listen = new JButton("Listen to Recording");
     ArrayList<String> sounds = new ArrayList<String>();
     String file;
+    boolean sound1Playing = false;
 
 
     public GUI(){
+        ///////
+
+        OSCPortIn receiver = null;
+        try {
+            receiver = new OSCPortIn(12000);
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
+        OSCListener listener = new OSCListener() {
+            public void acceptMessage(java.util.Date time, OSCMessage message) {
+                Object message_args[] = message.getArguments();
+
+                /////////////////////////////SOUND1
+                if (message_args[0].toString().equals("1.0")) {
+                    System.out.println(message_args[0]);
+                    try {
+                        if(sound1Playing != true) {
+                            AudioInputStream audio = AudioSystem.getAudioInputStream(new File("musical098.wav"));
+                            Clip clip = AudioSystem.getClip();
+                            clip.open(audio);
+                            clip.start();
+                            sound1Playing = true;
+
+                            LineListener listener1 = new LineListener() {
+                                public void update(LineEvent event) {
+                                    if (event.getType() == LineEvent.Type.STOP) {
+                                        sound1Playing = false;
+                                        return;
+                                    }
+
+                                }
+                            };
+                            clip.addLineListener(listener1);
+                            sounds.add("musical098.wav");
+                        }
+                    }
+
+                    catch(UnsupportedAudioFileException uae) {
+                        System.out.println(uae);
+                    }
+                    catch(IOException ioe) {
+                        System.out.println(ioe);
+                    }
+                    catch(LineUnavailableException lua) {
+                        System.out.println(lua);
+                    }
+                }
+                /////////////////////////////SOUND1
+            }
+        };
+        receiver.addListener("/wek/outputs", listener);
+        receiver.startListening();
+
+        /////////
         setTitle("Edit/Save Recording");
         setVisible(true);
         setSize(400, 200);
