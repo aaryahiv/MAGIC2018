@@ -14,7 +14,7 @@ import com.illposed.osc.*;
 import javax.sound.sampled.LineEvent.*;
 
 
-public class GUI extends JFrame{
+public class GUI extends JFrame {
     JPanel jp = new JPanel();
     JLabel jl = new JLabel();
     JButton save = new JButton("Save Recording");
@@ -23,9 +23,14 @@ public class GUI extends JFrame{
     ArrayList<String> sounds = new ArrayList<String>();
     String file;
     boolean sound1Playing = false;
+    boolean sound2Playing = false;
+    boolean sound3Playing = false;
+    boolean sound4Playing = false;
+    boolean sound5Playing = false;
+    boolean sound6Playing = false;
 
 
-    public GUI(){
+    public GUI() {
         ///////
 
         OSCPortIn receiver = null;
@@ -34,15 +39,16 @@ public class GUI extends JFrame{
         } catch (SocketException e) {
             e.printStackTrace();
         }
+
+        //////////SOUND1
         OSCListener listener = new OSCListener() {
             public void acceptMessage(java.util.Date time, OSCMessage message) {
                 Object message_args[] = message.getArguments();
 
-                /////////////////////////////SOUND1
                 if (message_args[0].toString().equals("1.0")) {
                     System.out.println(message_args[0]);
                     try {
-                        if(sound1Playing != true) {
+                        if (sound1Playing != true && sound2Playing != true) {
                             AudioInputStream audio = AudioSystem.getAudioInputStream(new File("musical098.wav"));
                             Clip clip = AudioSystem.getClip();
                             clip.open(audio);
@@ -61,21 +67,183 @@ public class GUI extends JFrame{
                             clip.addLineListener(listener1);
                             sounds.add("musical098.wav");
                         }
-                    }
-
-                    catch(UnsupportedAudioFileException uae) {
+                    } catch (UnsupportedAudioFileException uae) {
                         System.out.println(uae);
-                    }
-                    catch(IOException ioe) {
+                    } catch (IOException ioe) {
                         System.out.println(ioe);
-                    }
-                    catch(LineUnavailableException lua) {
+                    } catch (LineUnavailableException lua) {
                         System.out.println(lua);
                     }
                 }
-                /////////////////////////////SOUND1
+
+                /////SOUND2
+                else if (message_args[0].toString().equals("2.0")) {
+                    System.out.println(message_args[0]);
+                    try {
+                        if (sound1Playing != true && sound2Playing != true) {
+                            AudioInputStream audio = AudioSystem.getAudioInputStream(new File("musical112.wav"));
+                            Clip clip = AudioSystem.getClip();
+                            clip.open(audio);
+                            clip.start();
+                            sound2Playing = true;
+
+                            LineListener listener1 = new LineListener() {
+                                public void update(LineEvent event) {
+                                    if (event.getType() == LineEvent.Type.STOP) {
+                                        sound2Playing = false;
+                                        return;
+                                    }
+
+                                }
+                            };
+                            clip.addLineListener(listener1);
+                            sounds.add("musical112.wav");
+                        }
+                    } catch (UnsupportedAudioFileException uae) {
+                        System.out.println(uae);
+                    } catch (IOException ioe) {
+                        System.out.println(ioe);
+                    } catch (LineUnavailableException lua) {
+                        System.out.println(lua);
+                    }
+                }
+                /////SOUND2END
+
+                /////SOUND3
+                else if (message_args[0].toString().equals("3.0")) {
+                    System.out.println(message_args[0]);
+                    try {
+                        if (sound1Playing != true && sound2Playing != true && sound3Playing != true ) {
+                            AudioInputStream audio = AudioSystem.getAudioInputStream(new File("musical029.wav"));
+                            Clip clip = AudioSystem.getClip();
+                            clip.open(audio);
+                            clip.start();
+                            sound3Playing = true;
+
+                            LineListener listener1 = new LineListener() {
+                                public void update(LineEvent event) {
+                                    if (event.getType() == LineEvent.Type.STOP) {
+                                        sound3Playing = false;
+                                        return;
+                                    }
+
+                                }
+                            };
+                            clip.addLineListener(listener1);
+                            sounds.add("musical029.wav");
+                        }
+                    } catch (UnsupportedAudioFileException uae) {
+                        System.out.println(uae);
+                    } catch (IOException ioe) {
+                        System.out.println(ioe);
+                    } catch (LineUnavailableException lua) {
+                        System.out.println(lua);
+                    }
+                }
+                ////SOUND3END
+
+                /////SOUND4
+                else if (message_args[0].toString().equals("4.0")) {
+                    System.out.println(message_args[0]);
+                    try {
+                        if (sound1Playing != true && sound2Playing != true && sound3Playing != true && sound4Playing != true ) {
+                            AudioInputStream audio = AudioSystem.getAudioInputStream(new File("musical007.wav"));
+                            Clip clip = AudioSystem.getClip();
+                            clip.open(audio);
+                            clip.start();
+                            sound4Playing = true;
+
+                            LineListener listener1 = new LineListener() {
+                                public void update(LineEvent event) {
+                                    if (event.getType() == LineEvent.Type.STOP) {
+                                        sound4Playing = false;
+                                        return;
+                                    }
+
+                                }
+                            };
+                            clip.addLineListener(listener1);
+                            sounds.add("musical007.wav");
+                        }
+                    } catch (UnsupportedAudioFileException uae) {
+                        System.out.println(uae);
+                    } catch (IOException ioe) {
+                        System.out.println(ioe);
+                    } catch (LineUnavailableException lua) {
+                        System.out.println(lua);
+                    }
+                }
+                ////SOUND4END
+
+                /////SOUND5
+                else if (message_args[0].toString().equals("5.0")) {
+                    System.out.println(message_args[0]);
+                    try {
+                        if (sound1Playing != true && sound2Playing != true && sound3Playing != true && sound4Playing != true && sound5Playing != true) {
+                            AudioInputStream audio = AudioSystem.getAudioInputStream(new File("musical056.wav"));
+                            Clip clip = AudioSystem.getClip();
+                            clip.open(audio);
+                            clip.start();
+                            sound5Playing = true;
+
+                            LineListener listener1 = new LineListener() {
+                                public void update(LineEvent event) {
+                                    if (event.getType() == LineEvent.Type.STOP) {
+                                        sound5Playing = false;
+                                        return;
+                                    }
+
+                                }
+                            };
+                            clip.addLineListener(listener1);
+                            sounds.add("musical056.wav");
+                        }
+                    } catch (UnsupportedAudioFileException uae) {
+                        System.out.println(uae);
+                    } catch (IOException ioe) {
+                        System.out.println(ioe);
+                    } catch (LineUnavailableException lua) {
+                        System.out.println(lua);
+                    }
+                }
+                ////SOUND5END
+
+                /////SOUND6
+                else if (message_args[0].toString().equals("6.0")) {
+                    System.out.println(message_args[0]);
+                    try {
+                        if (sound1Playing != true && sound2Playing != true && sound3Playing != true && sound4Playing != true && sound5Playing != true && sound6Playing != true) {
+                            AudioInputStream audio = AudioSystem.getAudioInputStream(new File("dixie-horn_daniel-simion.wav"));
+                            Clip clip = AudioSystem.getClip();
+                            clip.open(audio);
+                            clip.start();
+                            sound6Playing = true;
+
+                            LineListener listener1 = new LineListener() {
+                                public void update(LineEvent event) {
+                                    if (event.getType() == LineEvent.Type.STOP) {
+                                        sound6Playing = false;
+                                        return;
+                                    }
+
+                                }
+                            };
+                            clip.addLineListener(listener1);
+                            sounds.add("dixie-horn_daniel-simion.wav");
+                        }
+                    } catch (UnsupportedAudioFileException uae) {
+                        System.out.println(uae);
+                    } catch (IOException ioe) {
+                        System.out.println(ioe);
+                    } catch (LineUnavailableException lua) {
+                        System.out.println(lua);
+                    }
+                }
+                ////SOUND6END
             }
         };
+
+
         receiver.addListener("/wek/outputs", listener);
         receiver.startListening();
 
@@ -99,14 +267,15 @@ public class GUI extends JFrame{
 
         jp.add(lbl);
 
-        String[] choices = { "SOUND 1","SOUND 2", "SOUND 3","SOUND 4","SOUND 5","SOUND 6"};
+        String[] choices = {"SOUND 1", "SOUND 2", "SOUND 3", "SOUND 4", "SOUND 5", "SOUND 6"};
 
         final JComboBox<String> cb = new JComboBox<String>(choices);
 
         cb.setVisible(true);
         jp.add(cb);
-        //End of dropdown list
+
         cb.addActionListener(new ActionListener() {
+//////////////////
 
             @Override
             public void actionPerformed(ActionEvent event) {
@@ -127,15 +296,11 @@ public class GUI extends JFrame{
                         clip.open(audio);
                         clip.start();
                         sounds.add("musical098.wav");
-                    }
-
-                    catch(UnsupportedAudioFileException uae) {
+                    } catch (UnsupportedAudioFileException uae) {
                         System.out.println(uae);
-                    }
-                    catch(IOException ioe) {
+                    } catch (IOException ioe) {
                         System.out.println(ioe);
-                    }
-                    catch(LineUnavailableException lua) {
+                    } catch (LineUnavailableException lua) {
                         System.out.println(lua);
                     }
                 }
@@ -148,15 +313,11 @@ public class GUI extends JFrame{
                         clip.open(audio);
                         clip.start();
                         sounds.add("musical112.wav");
-                    }
-
-                    catch(UnsupportedAudioFileException uae) {
+                    } catch (UnsupportedAudioFileException uae) {
                         System.out.println(uae);
-                    }
-                    catch(IOException ioe) {
+                    } catch (IOException ioe) {
                         System.out.println(ioe);
-                    }
-                    catch(LineUnavailableException lua) {
+                    } catch (LineUnavailableException lua) {
                         System.out.println(lua);
                     }
                 }
@@ -169,15 +330,11 @@ public class GUI extends JFrame{
                         clip.open(audio);
                         clip.start();
                         sounds.add("musical029.wav");
-                    }
-
-                    catch(UnsupportedAudioFileException uae) {
+                    } catch (UnsupportedAudioFileException uae) {
                         System.out.println(uae);
-                    }
-                    catch(IOException ioe) {
+                    } catch (IOException ioe) {
                         System.out.println(ioe);
-                    }
-                    catch(LineUnavailableException lua) {
+                    } catch (LineUnavailableException lua) {
                         System.out.println(lua);
                     }
                 }
@@ -190,15 +347,11 @@ public class GUI extends JFrame{
                         clip.open(audio);
                         clip.start();
                         sounds.add("musical007.wav");
-                    }
-
-                    catch(UnsupportedAudioFileException uae) {
+                    } catch (UnsupportedAudioFileException uae) {
                         System.out.println(uae);
-                    }
-                    catch(IOException ioe) {
+                    } catch (IOException ioe) {
                         System.out.println(ioe);
-                    }
-                    catch(LineUnavailableException lua) {
+                    } catch (LineUnavailableException lua) {
                         System.out.println(lua);
                     }
                 }
@@ -211,15 +364,11 @@ public class GUI extends JFrame{
                         clip.open(audio);
                         clip.start();
                         sounds.add("musical056.wav");
-                    }
-
-                    catch(UnsupportedAudioFileException uae) {
+                    } catch (UnsupportedAudioFileException uae) {
                         System.out.println(uae);
-                    }
-                    catch(IOException ioe) {
+                    } catch (IOException ioe) {
                         System.out.println(ioe);
-                    }
-                    catch(LineUnavailableException lua) {
+                    } catch (LineUnavailableException lua) {
                         System.out.println(lua);
                     }
                 }
@@ -232,22 +381,19 @@ public class GUI extends JFrame{
                         clip.open(audio);
                         clip.start();
                         sounds.add("dixie-horn_daniel-simion.wav");
-                    }
-
-                    catch(UnsupportedAudioFileException uae) {
+                    } catch (UnsupportedAudioFileException uae) {
                         System.out.println(uae);
-                    }
-                    catch(IOException ioe) {
+                    } catch (IOException ioe) {
                         System.out.println(ioe);
-                    }
-                    catch(LineUnavailableException lua) {
+                    } catch (LineUnavailableException lua) {
                         System.out.println(lua);
                     }
                 }
-
             }
-        });
 
+
+        });
+/////////////////////
 
         save.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -268,7 +414,6 @@ public class GUI extends JFrame{
                 }
 
 
-
             }
         });
 
@@ -285,15 +430,11 @@ public class GUI extends JFrame{
                     Clip clip = AudioSystem.getClip();
                     clip.open(audio);
                     clip.start();
-                }
-
-                catch(UnsupportedAudioFileException uae) {
+                } catch (UnsupportedAudioFileException uae) {
                     System.out.println(uae);
-                }
-                catch(IOException ioe) {
+                } catch (IOException ioe) {
                     System.out.println(ioe);
-                }
-                catch(LineUnavailableException lua) {
+                } catch (LineUnavailableException lua) {
                     System.out.println(lua);
                 }
             }
@@ -327,7 +468,7 @@ public class GUI extends JFrame{
                 audioInputStreamList.add(audioInputStream);
 
                 // keep calculating frame length
-                if(frameLength == null) {
+                if (frameLength == null) {
                     frameLength = audioInputStream.getFrameLength();
                 } else {
                     frameLength += audioInputStream.getFrameLength();
@@ -355,7 +496,7 @@ public class GUI extends JFrame{
 
         GUI gui = new GUI();
 
-
+        /*
         try {
             AudioInputStream audio = AudioSystem.getAudioInputStream(new File("musical064.wav"));
             Clip clip = AudioSystem.getClip();
@@ -373,7 +514,8 @@ public class GUI extends JFrame{
         catch(LineUnavailableException lua) {
             System.out.println(lua);
         }
+
+
+    */
     }
-
-
 }
